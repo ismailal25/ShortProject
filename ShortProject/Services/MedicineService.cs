@@ -49,29 +49,39 @@ namespace ShortProject.Services
 
         public void RemoveMedicine(int id)
         {
-            Medicine medicineToRemove = DB.Medicines.FirstOrDefault(medicine => medicine.Id == id);
-            if (medicineToRemove == null)
-            {
-                throw new NotFoundException($"Medicine with ID {id} not found.");
-            }
+            for (int i = 0; i <DB.Medicines.Length; i++)
 
-            Medicine[] newMedicines = DB.Medicines.Where(medicine => medicine.Id != id).ToArray();
-            DB.Medicines = newMedicines;
+            {
+                var item = DB.Medicines[i];
+                if(item.Id == id)
+                {
+                    for(int j = i; j < DB.Medicines.Length-1; j++)
+                    {
+                        DB.Medicines[j]= DB.Medicines[j+1];
+                    }
+                    Array.Resize(ref DB.Medicines,DB.Medicines.Length-1);
+                    Console.WriteLine("Deleted");
+                }
+
+            }
+            
         }
 
         public void UpdateMedicine(int id, Medicine updatedMedicine)
         {
-            Medicine medicineToUpdate = DB.Medicines.FirstOrDefault(medicine => medicine.Id == id);
-            if (medicineToUpdate == null)
+            foreach (var medicineToUpdate in DB.Medicines)
             {
-                throw new NotFoundException($"Medicine with ID {id} not found.");
-            }
-
             medicineToUpdate.Name = updatedMedicine.Name;
             medicineToUpdate.Price = updatedMedicine.Price;
             medicineToUpdate.CategoryId = updatedMedicine.CategoryId;
             medicineToUpdate.UserId = updatedMedicine.UserId;
             medicineToUpdate.CreatedDate = updatedMedicine.CreatedDate;
+
+            }
+            throw new NotFoundException("Medicine with ID not found");
+            
+            
+
         }
 
         private bool CategoryExists(int categoryId)

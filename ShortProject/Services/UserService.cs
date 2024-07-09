@@ -50,6 +50,10 @@ namespace ShortProject.Services
             Array.Resize(ref DB.Users, DB.Users.Length + 1);
             DB.Users[DB.Users.Length - 1] = user;
         }
+        public bool NoSpace(string space)
+        {
+            return string.IsNullOrWhiteSpace(space);
+        }
 
         
     }
